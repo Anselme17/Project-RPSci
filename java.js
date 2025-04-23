@@ -1,5 +1,7 @@
+
+
 function getcomputerchoice() {
-    random_num = Math.random()
+    let random_num = Math.random()
     let computer_guess="guess"
 
     if (random_num >= 0 && random_num < 0.33) {
@@ -12,11 +14,6 @@ function getcomputerchoice() {
         computer_guess="Scissors"
     }
     return computer_guess
-}
-
-function gethumanchoice() {
-    let userInput = prompt("Rock, Paper or Scissors ? :");
-    return userInput
 }
 
 
@@ -68,35 +65,55 @@ function playround(humanchoice,computerchoice) {
 
 
 
+
 function playgame() {
-    let compteur_joueur=0
-    let compteur_ordi=0
-    while (compteur_joueur<3 && compteur_ordi<3) {
-        let humanselection=gethumanchoice()
-        let computerselection=getcomputerchoice()
-        let score = "Score actuel => J1: "+compteur_joueur +" "+compteur_ordi+" :J2" 
-        let result=playround(humanselection,computerselection)
-        if (result=="Win") {
-            compteur_joueur++
-            score = "Score actuel => J1: "+compteur_joueur +" "+compteur_ordi+" :J2" 
-            console.log(score)
+    let compteur_joueur = 0;
+    let compteur_ordi = 0;
+    let score = "Score actuel => J1: " + compteur_joueur + " " + compteur_ordi + " :J2"; 
+
+    let buttonRock = document.querySelector("#butrock");
+    let buttonPaper = document.querySelector("#butpaper");
+    let buttonScissors = document.querySelector("#butscissors");
+    let containercontent = document.querySelector("p");
+
+    buttonRock.addEventListener("click", () => {
+        let computerselection = getcomputerchoice(); // Nouveau choix à chaque tour
+        let result = playround("Rock", computerselection);
+        updateScore(result);
+    });
+
+    buttonPaper.addEventListener("click", () => {
+        let computerselection = getcomputerchoice();
+        let result = playround("Paper", computerselection);
+        updateScore(result);
+    });
+
+    buttonScissors.addEventListener("click", () => {
+        let computerselection = getcomputerchoice();
+        let result = playround("Scissors", computerselection);
+        updateScore(result);
+    });
+
+    function updateScore(result) {
+        if (result == "Win") {
+            compteur_joueur++;
+        } 
+        else if (result == "Loose") {
+            compteur_ordi++;
         }
-
-        if (result=="Loose") {
-            compteur_ordi++
-            score = "Score actuel => J1: "+compteur_joueur +" "+compteur_ordi+" :J2" 
-            console.log(score)
+        score = "Score actuel => J1: " + compteur_joueur + " " + compteur_ordi + " :J2";
+        const scorehtml = document.createElement("div");
+        scorehtml.textContent=score
+        containercontent.appendChild(scorehtml)
+    
+        if (compteur_joueur == 5) {
+            console.log("Bravo, vous avez remporté la partie " + compteur_joueur + " à " + compteur_ordi + " !");
         }
-        
-
+    
+        if (compteur_ordi == 5) {
+            console.log("Dommage, vous avez perdu la partie " + compteur_joueur + " à " + compteur_ordi + " !");
+        }
     }
-
-    if (compteur_joueur==3) {
-        console.log("Bravo, vous avez remporté la partie "+compteur_joueur +" à "+compteur_ordi+" !")
-    }
-
-    else {
-        console.log("Dommage, vous avez perdu la partie "+compteur_joueur +" à "+compteur_ordi+" !")
-    }
-
 }
+
+playgame();
